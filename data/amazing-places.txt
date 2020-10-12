@@ -11,7 +11,7 @@ Artsakh
 Australia
 Austria
 Azerbaijan
-Bahamas, The
+The Bahamas
 Bahrain
 Bangladesh
 Barbados
@@ -37,11 +37,11 @@ Central African Republic
 Chad
 Chile
 China
-China, Republic of
+Republic of China
 Colombia
 Comoros
-Congo, Democratic Republic of the
-Congo, Republic of the
+Democratic Republic of the Congo
+Republic of the Congo
 Cook Islands
 Costa Rica
 Côte d'Ivoire
@@ -68,7 +68,7 @@ Fiji
 Finland
 France
 Gabon
-Gambia, The
+The Gambia
 Georgia
 Germany
 Ghana
@@ -97,8 +97,8 @@ Jordan
 Kazakhstan
 Kenya
 Kiribati
-Korea, North
-Korea, South
+North Korea
+South Korea
 Kosovo
 Kuwait
 Kyrgyzstan
@@ -187,7 +187,7 @@ South Sudan
 Spain
 Sri Lanka
 Sudan
-Sudan, South
+South Sudan
 Suriname
 Swaziland
 Sweden
