@@ -1,6 +1,6 @@
 import log from './log'
 
-setInterval(checkToTweet, 1)
+setInterval(checkToTweet, 60)
 
 function checkToTweet() {
     // Is the current time XX:00 minutes?
