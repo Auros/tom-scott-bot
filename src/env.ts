@@ -5,7 +5,7 @@ dotenv.config()
 
 export const NODE_ENV = process.env.NODE_ENV as string
 
-const required = ['GOOGLE_CSE_ID', 'GOOGLE_API_KEY', 'TWITTER_CONSUMER_KEY', 'TWITTER_CONSUMER_SECRET'] 
+const required = ['GOOGLE_CSE_ID', 'GOOGLE_API_KEY', 'TWITTER_CONSUMER_KEY', 'TWITTER_CONSUMER_SECRET', 'TWITTER_ACCESS_TOKEN', 'TWITTER_ACCESS_SECRET'] 
 
 try {
     for (const variable of required) {
@@ -33,4 +33,14 @@ if (TWITTER_CONSUMER_KEY === undefined) {
 export const TWITTER_CONSUMER_SECRET = process.env.TWITTER_CONSUMER_SECRET as string
 if (TWITTER_CONSUMER_SECRET === undefined) {
     fail(`TWITTER_CONSUMER_SECRET is not defined.`)
+}
+
+export const TWITTER_ACCESS_TOKEN = process.env.TWITTER_ACCESS_TOKEN as string
+if (TWITTER_ACCESS_TOKEN === undefined) {
+    fail(`TWITTER_ACCESS_TOKEN is not defined.`)
+}
+
+export const TWITTER_ACCESS_SECRET = process.env.TWITTER_ACCESS_SECRET as string
+if (TWITTER_ACCESS_SECRET === undefined) {
+    fail(`TWITTER_ACCESS_SECRET is not defined.`)
 }
