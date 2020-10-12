@@ -1,5 +1,5 @@
-import fs from 'fs'
 import log, { fail } from '../log'
+import { generateImage, CaptionData } from '../image-gen'
 import Twitter, { Stream } from 'twitter-lite'
 import { TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET } from '../env'
 
@@ -73,24 +73,8 @@ async function processRequest(tweet: any) {
         log.info('Reply Detected. Checking for image.')
         // TODO: Check for image on the parent tweet.
         // TODO: Run the image into image-gen
-        const b64Image = fs.readFileSync('C:/Users/Auros/Documents/Programming/Web Stuff/tom-scott-bot/src/bot/tom_scott.png', { encoding: 'base64' })
-        let image: any | undefined
-        // Upload Image
-        try {
-            if (b64Image !== null) {
-                image = await mediaClient.post('media/upload', {
-                    media: b64Image
-                })
-            }
-            else {
-                log.error('No Image Found')
-            }
-        }
-        catch (e) {
-            console.log(e)
-            log.error('Failed to upload image.')
-        }
-
+        
+        const image = await uploadImage('')
         try {
             await client.post('statuses/update', {
                 media_ids: image.media_id_string,
@@ -107,9 +91,17 @@ async function processRequest(tweet: any) {
     }
     else {
         log.info('Not a reply, handling request normally.')
+        const imageData: CaptionData = {
+            name: location,
+            topText: 'I am at',
+            bottomText: ''
+        }
+        const b64Image = await generateImage(imageData)
+        const image = await uploadImage(b64Image.toString('base64'))
         try {
             await client.post('statuses/update', {
-                status: `Welcome to ${location}`,
+                status: '',
+                media_ids: image.media_id_string,
                 auto_populate_reply_metadata: true,
                 in_reply_to_status_id: tweet.id_str,
             })
@@ -120,4 +112,24 @@ async function processRequest(tweet: any) {
             log.error(`Failed to send tweet.`)
         }
     }
+}
+
+async function uploadImage(b64Image: string) {
+    let image: any | undefined
+    // Upload Image
+    try {
+        if (b64Image !== null) {
+            image = await mediaClient.post('media/upload', {
+                media: b64Image
+            })
+        }
+        else {
+            log.error('No Image Found')
+        }
+    }
+    catch (e) {
+        console.log(e)
+        log.error('Failed to upload image.')
+    }
+    return image
 }

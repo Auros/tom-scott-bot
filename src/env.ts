@@ -1,5 +1,5 @@
 import dotenv from 'dotenv'
-import log, { fail } from './log'
+import { fail } from './log'
 
 dotenv.config()
 

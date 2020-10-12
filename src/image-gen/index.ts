@@ -8,7 +8,7 @@ import { createCanvas, loadImage, registerFont, CanvasRenderingContext2D } from 
 const imageClient = new GoogleImages(GOOGLE_CSE_ID, GOOGLE_API_KEY)
 registerFont(`${__dirname}/../../fonts/impact.ttf`, { family: 'Impact Regular' })
 
-interface CaptionData {
+export interface CaptionData {
     name: string
     topText: string
     bottomText: string
