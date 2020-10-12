@@ -7,4 +7,9 @@ const signale = new Signale({
     }
 })
 
+export const fail = (message: string) => {
+    signale.fatal(message)
+    return process.exit(1)
+}
+
 export default signale
