@@ -1,4 +1,10 @@
 import log from './log'
+import { NODE_ENV } from './env'
+
+log.info(`Running in ${NODE_ENV}`)
+
+// Setup Twitter Bot
+
 
 setInterval(checkToTweet, 60)
 
