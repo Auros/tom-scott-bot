@@ -158,5 +158,3 @@ export function generateImage(captionData: CaptionData = randomPlace()) : Promis
         })    
     })
 }
-
-generateImage()
