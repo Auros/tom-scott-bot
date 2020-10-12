@@ -1,7 +1,7 @@
-import log, { fail } from '../log'
-import { TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET } from '../env'
-import Twitter, { Stream } from 'twitter-lite'
 import fs from 'fs'
+import log, { fail } from '../log'
+import Twitter, { Stream } from 'twitter-lite'
+import { TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET } from '../env'
 
 const client = new Twitter({
     consumer_key: TWITTER_CONSUMER_KEY,

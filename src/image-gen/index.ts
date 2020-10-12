@@ -1,12 +1,11 @@
-import log, { fail } from '../log'
+import fs from 'fs'
+import log from '../log'
+import GoogleImages from 'google-images'
+import { GOOGLE_CSE_ID, GOOGLE_API_KEY } from '../env'
+import { createCanvas, loadImage, registerFont, CanvasRenderingContext2D } from 'canvas'
 
-require("dotenv").config({ path: `${__dirname}/../../.env` })
 
-const GoogleImages = require("google-images")
-const { createCanvas, loadImage, registerFont, CanvasRenderingContext2D} = require('canvas')
-const fs = require("fs")
-
-const imageClient = new GoogleImages(process.env.GOOGLE_CSE_ID, process.env.GOOGLE_API_KEY)
+const imageClient = new GoogleImages(GOOGLE_CSE_ID, GOOGLE_API_KEY)
 registerFont(`${__dirname}/../../fonts/impact.ttf`, { family: 'Impact Regular' })
 
 interface CaptionData {
@@ -78,7 +77,7 @@ function random(min: number, max: number): number {
 function findTomScottImage() : Promise<typeof Image>{
     //temporarily pull away tom from one of his videos so we can forcibly take a picture of him
     return new Promise((resolve, reject) => {
-        fs.readdir(`${__dirname}/../../images/`, (err: Error, files: string[]) => {
+        fs.readdir(`${__dirname}/../../images/`, (_, files: string[]) => {
             const imagePath = files[random(0, files.length - 1)]
             loadImage(`${__dirname}/../../images/${imagePath}`).then((loadedImage: any) => {
                 resolve(loadedImage)
@@ -123,7 +122,7 @@ function drawExtrasOnCanvas(canvas: any, ImageSize: ImageSize, captionData: Capt
 }
 
 export function randomPlace() : CaptionData {
-    const allPlaces = JSON.parse(fs.readFileSync(`${__dirname}/../../data/amazing-places.json`))
+    const allPlaces = JSON.parse(fs.readFileSync(`${__dirname}/../../data/amazing-places.json`, { encoding: 'utf-8' }))
     const CaptionDataArray: CaptionData[] = []
     for (let i = 0; i < Object.keys(allPlaces).length; i++) {
         const placeData: PlaceData = Object.values(allPlaces)[i] as PlaceData
@@ -149,11 +148,11 @@ export function generateImage(captionData: CaptionData = randomPlace()) : Promis
                 ctx.drawImage(loadedImage, (ImageSize.width-image.width*minRatio)/2, (ImageSize.height-image.height*minRatio)/2, image.width*minRatio, image.height*minRatio) // this hurts more though
                 resolve(drawExtrasOnCanvas(canvas, ImageSize, captionData))
             }).catch((error: Error) => {
-                fail(error.message)
+                log.error(error.message)
                 reject(error)
             })
         }).catch((error: Error) => {
-            fail(error.message)
+            log.error(error.message)
             reject(error)
         })    
     })

@@ -2,6 +2,11 @@
 # yarn lockfile v1
 
 
+"@types/google-images@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@types/google-images/-/google-images-2.1.0.tgz#911fc4d2f8d33984831002c4d4ea9ae897baf252"
+  integrity sha512-8OB6SQa1FQpzlIV32A0NJCJptolm3iy3c+gxm81d8IzsmQ4JoMwBkjD4CQE5irwKE0al3TE3Y4hgi0u93Ebeow==
+
 "@types/node@*", "@types/node@^14.11.8":
   version "14.11.8"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-14.11.8.tgz#fe2012f2355e4ce08bca44aeb3abbb21cf88d33f"
