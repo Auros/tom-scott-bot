@@ -114,7 +114,22 @@ async function processRequest(tweet: any) {
     }
 }
 
-async function uploadImage(b64Image: string) {
+export async function submitScott(data: CaptionData, imageId: string) {
+    try {
+        await client.post('statuses/update', {
+            status: '',
+            media_ids: imageId,
+            auto_populate_reply_metadata: true
+        })
+        log.success('Sent Tweet')
+    }
+    catch (e) {
+        console.log(e)
+        log.error(`Failed to send tweet.`)
+    }
+}
+
+export async function uploadImage(b64Image: string) {
     let image: any | undefined
     // Upload Image
     try {
