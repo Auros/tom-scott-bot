@@ -2,7 +2,7 @@ import fs from 'fs'
 import log from '../log'
 import GoogleImages from 'google-images'
 import { GOOGLE_CSE_ID, GOOGLE_API_KEY } from '../env'
-import { createCanvas, loadImage, registerFont, CanvasRenderingContext2D } from 'canvas'
+import { createCanvas, loadImage, registerFont, CanvasRenderingContext2D, Image } from 'canvas'
 
 
 const imageClient = new GoogleImages(GOOGLE_CSE_ID, GOOGLE_API_KEY)
@@ -136,26 +136,40 @@ export function randomPlace() : CaptionData {
     return CaptionDataArray[random(0, CaptionDataArray.length - 1)]
 }
 
-export function generateImage(captionData: CaptionData = randomPlace()) : Promise<Buffer> {
+const ImageSize: ImageSize = {width: 1920, height: 1080}
+
+export function tomScottOnBackground(captionData: CaptionData, loadedImage: any) : Promise<Buffer> {
     return new Promise((resolve, reject) => {
-        imageClient.search(captionData.name, {size:"large"})
-        .then((images: any) => {
-            const ImageSize: ImageSize = {width: 1920, height: 1080}
-            const image = findBestImage(ImageSize.width/ImageSize.height, images)
-            const canvas = createCanvas(ImageSize.width, ImageSize.height)
-            let ctx = canvas.getContext('2d')
-            loadImage(image.url).then((loadedImage: any) => {
-                //ctx.drawImage(image, 50, 0, 70, 70)
-                const minRatio = (ImageSize.width/image.width > ImageSize.height/image.height) ? ImageSize.width/image.width : ImageSize.height/image.height // this hurts to look at
-                ctx.drawImage(loadedImage, (ImageSize.width-image.width*minRatio)/2, (ImageSize.height-image.height*minRatio)/2, image.width*minRatio, image.height*minRatio) // this hurts more though
-                resolve(drawExtrasOnCanvas(canvas, ImageSize, captionData))
+        const canvas = createCanvas(ImageSize.width, ImageSize.height)
+        let ctx = canvas.getContext('2d')
+        //ctx.drawImage(image, 50, 0, 70, 70)
+        const minRatio = (ImageSize.width/loadedImage.width > ImageSize.height/loadedImage.height) ? ImageSize.width/loadedImage.width : ImageSize.height/loadedImage.height // this hurts to look at
+        ctx.drawImage(loadedImage, (ImageSize.width-loadedImage.width*minRatio)/2, (ImageSize.height-loadedImage.height*minRatio)/2, loadedImage.width*minRatio, loadedImage.height*minRatio) // this hurts more though
+        resolve(drawExtrasOnCanvas(canvas, ImageSize, captionData))
+    })
+}
+
+export function generateImage(captionData: CaptionData = randomPlace(), imageBuffer?: Buffer) : Promise<Buffer> {
+    return new Promise((resolve, reject) => {
+        if(imageBuffer){
+            // buffer to image
+            const img = new Image()
+            img.onload = () => { resolve(tomScottOnBackground(captionData, img)) };
+            img.onerror = err => { log.error(err.message); reject(err) }
+            img.src = imageBuffer;
+        }else{
+            imageClient.search(captionData.name, {size:"large"}).then((images: any) => {
+                const image = findBestImage(ImageSize.width/ImageSize.height, images)
+                loadImage(image.url).then((loadedImage: any) => {
+                    resolve(tomScottOnBackground(captionData, loadedImage))
+                }).catch((error: Error) => {
+                    log.error(error.message)
+                    reject(error)
+                })
             }).catch((error: Error) => {
                 log.error(error.message)
                 reject(error)
-            })
-        }).catch((error: Error) => {
-            log.error(error.message)
-            reject(error)
-        })    
+            })    
+        }
     })
 }
