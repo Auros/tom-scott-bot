@@ -15,7 +15,7 @@ async function run() {
     log.complete('All checks complete.')
 
     // Start Checking The Time
-    setInterval(checkToTweet, 60)
+    setInterval(checkToTweet, 1000 * 60)
 }
 
 function checkToTweet() {
@@ -23,8 +23,8 @@ function checkToTweet() {
     const date = new Date()
     if (date.getMinutes() == 0) {
         return
+        tweetScott()
     }
-    tweetScott()
 }
 
 async function tweetScott() {

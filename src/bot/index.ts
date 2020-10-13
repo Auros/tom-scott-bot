@@ -1,7 +1,8 @@
+import fetch from 'cross-fetch'
 import log, { fail } from '../log'
-import { generateImage, CaptionData } from '../image-gen'
 import Twitter, { Stream } from 'twitter-lite'
-import { TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET } from '../env'
+import { generateImage, CaptionData } from '../image-gen'
+import { TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET, ALLOWED_REPLIERS } from '../env'
 
 const client = new Twitter({
     consumer_key: TWITTER_CONSUMER_KEY,
@@ -64,30 +65,48 @@ async function processRequest(tweet: any) {
     if (location === '' || location === null) {
         return
     }
+    if (ALLOWED_REPLIERS !== undefined) {
+        if (!ALLOWED_REPLIERS.includes((tweet.user.screen_name as string).toLowerCase())) {
+            return
+        }
+    }
     // Send Request
     log.start('Received request to generate a Tom Scott Image')
     log.info(`Location: ${location}`)
     log.info(`From: ${tweet.user.name} (${tweet.user.screen_name})`)
     
     if (tweet.in_reply_to_status_id !== null) {
-        log.info('Reply Detected. Checking for image.')
+        /*log.info('Reply Detected. Checking for image.')
         // TODO: Check for image on the parent tweet.
-        // TODO: Run the image into image-gen
         
-        const image = await uploadImage('')
-        try {
-            await client.post('statuses/update', {
-                media_ids: image.media_id_string,
-                status: `Welcome to ${location}`,
-                auto_populate_reply_metadata: true,
-                in_reply_to_status_id: tweet.id_str
-            })
-            log.success('Sent Tweet')
-        }
-        catch (e) {
-            console.log(e)
-            log.error(`Failed to send tweet.`)
-        }
+        const parent = await client.get(`statuses/show/${tweet.in_reply_to_status_id}`)
+        if (parent.entities["media"] === undefined || parent.entities["media"].length == 0) {
+            const url = parent.entities["media"][0]["media_url"]
+            const res = await fetch(url)
+            
+            const parentImage = Buffer.from(await res.arrayBuffer())
+
+            const parentImageObject = await uploadImage()
+            const imageData: CaptionData = {
+                name: location,
+                topText: 'I am at',
+                bottomText: ''
+            }
+            try {
+                await client.post('statuses/update', {
+                    media_ids: parentImageObject.media_id_string,
+                    status: '',
+                    auto_populate_reply_metadata: true,
+                    in_reply_to_status_id: tweet.id_str
+                })
+                log.success('Sent Tweet')
+            }
+            catch (e) {
+                console.log(e)
+                log.error(`Failed to send tweet.`)
+            }
+        }*/
+        // TODO: Run the image into image-gen
     }
     else {
         log.info('Not a reply, handling request normally.')

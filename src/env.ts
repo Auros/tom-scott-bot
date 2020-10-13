@@ -44,3 +44,5 @@ export const TWITTER_ACCESS_SECRET = process.env.TWITTER_ACCESS_SECRET as string
 if (TWITTER_ACCESS_SECRET === undefined) {
     fail(`TWITTER_ACCESS_SECRET is not defined.`)
 }
+
+export const ALLOWED_REPLIERS: String[] | undefined = process.env.ALLOWED_REPLIERS?.split(',')
