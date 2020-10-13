@@ -1,4 +1,4 @@
-import { Signale } from 'signale'
+import { Signale } from '@lolpants/signale'
 
 const signale = new Signale({
     config: {
