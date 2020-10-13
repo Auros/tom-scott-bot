@@ -48,9 +48,10 @@ function findBestImage(aspectRatio: number, imageArray: any[]){
 
 function ctxWithText(ctx: CanvasRenderingContext2D, text: string, textType: TextType, ImageSize: ImageSize, textOffset?: number) : CanvasRenderingContext2D {
     ctx.font = "150px Impact"
-    ctx.fillStyle = 'white'
-    ctx.strokeStyle = 'black'
+    ctx.fillStyle = "white"
+    ctx.strokeStyle = "black"
     ctx.lineWidth = 16
+    ctx.lineJoin = "round"
 
     text = text.toUpperCase()
     if(!textOffset) textOffset = 25
@@ -59,6 +60,7 @@ function ctxWithText(ctx: CanvasRenderingContext2D, text: string, textType: Text
         const widthModifier = (ImageSize.width - ctx.lineWidth*2)/ctx.measureText(text).width
         const newFontSize = (150*widthModifier) - .05*(150*widthModifier)
         ctx.font = `${newFontSize}px Impact`
+        ctx.lineWidth = (16*widthModifier) - .05*(16*widthModifier)
     }
     if(textType == TextType.Top){
         ctx.strokeText(text, (ImageSize.width-ctx.measureText(text).width)/2, ctx.measureText(text).actualBoundingBoxAscent + textOffset)
