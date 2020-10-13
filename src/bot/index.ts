@@ -61,7 +61,7 @@ async function setupStream() {
 }
 
 async function processRequest(tweet: any) {
-    const location = (tweet.text as string).replace(`${mentionName}`, '').trim()
+    const location = (tweet.text as string).replace(`${mentionName}`, '').trim().replace('.', '')
     if (location === '' || location === null) {
         return
     }

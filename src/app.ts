@@ -22,8 +22,8 @@ function checkToTweet() {
     // Is the current time XX:00 minutes?
     const date = new Date()
     if (date.getMinutes() == 0) {
-        return
         tweetScott()
+        return
     }
 }
 
