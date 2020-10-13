@@ -1,6 +1,7 @@
 import log from './log'
 import { NODE_ENV } from './env'
-import { runTwitterSetup } from './bot'
+import { randomPlace, generateImage } from './image-gen'
+import { runTwitterSetup, submitScott, uploadImage } from './bot'
 
 run()
 
@@ -14,7 +15,7 @@ async function run() {
     log.complete('All checks complete.')
 
     // Start Checking The Time
-    setInterval(checkToTweet, 60)
+    setInterval(checkToTweet, 1000 * 60)
 }
 
 function checkToTweet() {
@@ -22,13 +23,13 @@ function checkToTweet() {
     const date = new Date()
     if (date.getMinutes() == 0) {
         return
+        tweetScott()
     }
 }
 
-function getImageData() {
-
-}
-
-function tweet() {
-    
+async function tweetScott() {
+    const ran = randomPlace()
+    const img = (await generateImage(ran)).toString('base64')
+    const upl = await uploadImage(img)
+    await submitScott(ran, upl.media_id_string)
 }
