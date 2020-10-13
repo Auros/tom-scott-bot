@@ -138,7 +138,7 @@ export function randomPlace() : CaptionData {
 
 const ImageSize: ImageSize = {width: 1920, height: 1080}
 
-export function tomScottOnBackground(captionData: CaptionData, loadedImage: any) : Promise<Buffer> {
+function tomScottOnBackground(captionData: CaptionData, loadedImage: any) : Promise<Buffer> {
     return new Promise((resolve, reject) => {
         const canvas = createCanvas(ImageSize.width, ImageSize.height)
         let ctx = canvas.getContext('2d')
