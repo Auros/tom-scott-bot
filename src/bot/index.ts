@@ -67,6 +67,7 @@ async function processRequest(tweet: any) {
     }
     if (ALLOWED_REPLIERS !== undefined) {
         if (!ALLOWED_REPLIERS.includes((tweet.user.screen_name as string).toLowerCase())) {
+            log.info(`${tweet.user.name} (${tweet.user.screen_name}) tried to tweet the bot directly but isn't allowed too!`)
             return
         }
     }
